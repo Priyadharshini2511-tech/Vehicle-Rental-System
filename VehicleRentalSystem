@@ -1,0 +1,117 @@
+package com.rental.app;
+
+import java.util.*;
+import com.rental.model.*;
+import com.rental.transaction.*;
+
+public class VehicleRentalSystem {
+    static Scanner sc = new Scanner(System.in);
+    static List<Vehicle> vehicles = new ArrayList<>();
+    static List<Customer> customers = new ArrayList<>();
+    static int rentalCounter = 1;
+
+    public static void main(String[] args) {
+        while (true) {
+            System.out.println("\n=== Vehicle Rental System ===");
+            System.out.println("1. Add Vehicle");
+            System.out.println("2. Add Customer");
+            System.out.println("3. Rent Vehicle");
+            System.out.println("4. Return Vehicle");
+            System.out.println("5. Display Vehicles");
+            System.out.println("6. Exit");
+            System.out.print("Choose: ");
+            int choice = sc.nextInt();
+
+            switch (choice) {
+                case 1: addVehicle(); break;
+                case 2: addCustomer(); break;
+                case 3: rentVehicle(); break;
+                case 4: returnVehicle(); break;
+                case 5: displayVehicles(); break;
+                case 6: System.exit(0);
+                default: System.out.println("Invalid choice!");
+            }
+        }
+    }
+
+    static void addVehicle() {
+        System.out.print("Enter Vehicle ID: ");
+        int id = sc.nextInt();
+        sc.nextLine();
+        System.out.print("Enter Brand: ");
+        String brand = sc.nextLine();
+        System.out.print("Enter Model: ");
+        String model = sc.nextLine();
+        System.out.print("Enter Daily Rate: ");
+        double rate = sc.nextDouble();
+        System.out.print("No. of vehicle : ");
+        int type = sc.nextInt();
+
+        if (type == 1) vehicles.add(new Car(id, brand, model, rate));
+        else vehicles.add(new Bike(id, brand, model, rate));
+
+        System.out.println("Vehicle added successfully!");
+    }
+
+    static void addCustomer() {
+        System.out.print("Enter Customer ID: ");
+        int id = sc.nextInt();
+        sc.nextLine();
+        System.out.print("Enter Name: ");
+        String name = sc.nextLine();
+        System.out.print("Premium? (yes/no): ");
+        String type = sc.nextLine();
+
+        if (type.equalsIgnoreCase("yes")) customers.add(new PremiumCustomer(id, name));
+        else customers.add(new Customer(id, name));
+
+        System.out.println("Customer added successfully!");
+    }
+
+    static void rentVehicle() {
+        System.out.print("Enter Customer ID: ");
+        int custId = sc.nextInt();
+        Customer customer = findCustomer(custId);
+        if (customer == null) {
+            System.out.println("Customer not found!");
+            return;
+        }
+
+        System.out.print("Enter Vehicle ID: ");
+        int vehId = sc.nextInt();
+        Vehicle vehicle = findVehicle(vehId);
+        if (vehicle == null || !vehicle.available) {
+            System.out.println("Vehicle not available!");
+            return;
+        }
+
+        System.out.print("Enter Rental Days: ");
+        int days = sc.nextInt();
+        RentalTransaction rental = new RentalTransaction(rentalCounter++, vehicle, customer, days);
+        double cost = rental.calculateCost();
+
+        Bill bill = new Bill(cost);
+        System.out.println("Rental Successful!");
+        bill.showBill();
+    }
+
+    static void returnVehicle() {
+        System.out.print("Enter Vehicle ID: ");
+        int vehId = sc.nextInt();
+        Vehicle vehicle = findVehicle(vehId);
+        if (vehicle == null || vehicle.available) {
+            System.out.println("Vehicle is not rented currently!");
+            return;
+        }
+
+        System.out.print("Enter Late Days: ");
+        int lateDays = sc.nextInt();
+
+        RentalTransaction rental = new RentalTransaction(0, vehicle, new Customer(0, "Dummy"), 0);
+        ReturnTransaction ret = new ReturnTransaction(rental, lateDays);
+        double penalty = ret.calculatePenalty();
+
+        Bill bill = new Bill(penalty);
+        System.out.println("Vehicle Returned!");
+        bill.showBill();
+    }
