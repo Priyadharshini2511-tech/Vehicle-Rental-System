@@ -1,0 +1,25 @@
+package com.rental.model;
+
+public class Vehicle {
+	 public int id;
+	    public String brand;
+	    public String model;
+	    public boolean available;
+	    public double dailyRate;
+
+	    public Vehicle(int id, String brand, String model, double dailyRate) {
+	        this.id = id;
+	        this.brand = brand;
+	        this.model = model;
+	        this.dailyRate = dailyRate;
+	        this.available = true;
+	    }
+
+	    public String getDetails() {
+	        return id + " - " + brand + " " + model + " | Rate: " + dailyRate + " | Available: " + available;
+	    }
+
+	    public void setAvailable(boolean status) {
+	        this.available = status;
+	    }
+}
