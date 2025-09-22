@@ -1,0 +1,15 @@
+package com.rental.model;
+
+public class Customer {
+    public int id;
+    public String name;
+
+    public Customer(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public String getDetails() {
+        return id + " - " + name;
+    }
+}
