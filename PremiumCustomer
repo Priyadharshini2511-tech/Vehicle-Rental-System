@@ -1,0 +1,13 @@
+package com.rental.model;
+
+public class PremiumCustomer extends Customer {
+    public double discountRate = 0.1; // 10% discount
+
+    public PremiumCustomer(int id, String name) {
+        super(id, name);
+    }
+
+    public double getDiscountedRate(double amount) {
+        return amount - (amount * discountRate);
+    }
+}
