@@ -1,0 +1,13 @@
+package com.rental.transaction;
+
+public class Bill {
+    public double totalAmount;
+
+    public Bill(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public void showBill() {
+        System.out.println("Final Bill Amount: Rs." + totalAmount);
+    }
+}
