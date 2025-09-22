@@ -1,0 +1,26 @@
+package com.rental.transaction;
+
+import com.rental.model.*;
+
+public class RentalTransaction {
+    public int rentalId;
+    public Vehicle vehicle;
+    public Customer customer;
+    public int days;
+
+    public RentalTransaction(int rentalId, Vehicle vehicle, Customer customer, int days) {
+        this.rentalId = rentalId;
+        this.vehicle = vehicle;
+        this.customer = customer;
+        this.days = days;
+        vehicle.setAvailable(false);
+    }
+
+    public double calculateCost() {
+        double cost = days * vehicle.dailyRate;
+        if (customer instanceof PremiumCustomer) {
+            cost = ((PremiumCustomer) customer).getDiscountedRate(cost);
+        }
+        return cost;
+    }
+}
