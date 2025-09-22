@@ -1,0 +1,18 @@
+package com.rental.transaction;
+
+import com.rental.model.*;
+
+public class ReturnTransaction {
+    public RentalTransaction rental;
+    public int lateDays;
+
+    public ReturnTransaction(RentalTransaction rental, int lateDays) {
+        this.rental = rental;
+        this.lateDays = lateDays;
+        rental.vehicle.setAvailable(true);
+    }
+
+    public double calculatePenalty() {
+        return lateDays * (rental.vehicle.dailyRate * 0.5);
+    }
+}
